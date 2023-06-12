@@ -16,7 +16,7 @@
     <h:body>
 
         <h1>#{testView.string}</h1>
-        <p:link outcome="test2" value="to test2(fixed)"></p:link>
+        <p:link outcome="test" value="to test"></p:link>
         <h:form id="frmTest" lang="#{testView.locale}">
             <p:selectOneMenu id="localeSelect" value="#{testView.locale}" onchange="submit()">
                 <f:converter converterId="LocaleConverter"></f:converter>
@@ -28,6 +28,29 @@
             <p:datePicker id="dt" value="#{testView.datePickerValue}" yearNavigator="true" monthNavigator="true">
             </p:datePicker>
         </h:form>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                if (PrimeFaces.widget.DatePicker) {
+                    $.prime.datePicker.prototype.renderTitle = function(monthMetadata) {
+                        const month = this.renderTitleMonthElement(monthMetadata.month, monthMetadata.index);
+                        const year = this.renderTitleYearElement(monthMetadata.year, monthMetadata.index);
+                        let locale = PrimeFaces.settings.locale;
+                        if (!locale) {
+                            locale = 'ja';
+                        }
+                        let ret = '<div class="ui-datepicker-title">';
+                        if (PrimeFaces.locales[locale].showMonthAfterYear) {
+                            ret += year + month;
+                        } else {
+                            ret += month + year;
+                        }
+                        ret += '</div>';
+                        return ret;
+                    }
+                }
+            });
+        </script>
 
     </h:body>
 </html>
